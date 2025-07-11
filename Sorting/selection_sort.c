@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
 void print_array(int arr[], int n) {
     for (int i = 0; i < n; ++i) {
@@ -16,9 +16,11 @@ void selection_sort(int arr[], int n) {
                 t = j;
             }
         }
-        int temp = arr[i];
-        arr[i] = arr[t];
-        arr[t] = temp;
+        if (t != i) {
+            int temp = arr[i];
+            arr[i] = arr[t];
+            arr[t] = temp;
+        }
     }
 }
 
@@ -27,9 +29,17 @@ int main(void) {
     printf("Enter array size: ");
     scanf("%d", &n);
 
-    if (n < 1) return 0;
+    if (n < 1) {
+        printf("Array size must be positive.\n");
+        return 1;
+    }
 
-    int arr[n];
+    int *arr = malloc(n * sizeof(int));
+    if (arr == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1;
+    }
+
     printf("Enter %d integers: ", n);
     for (int i = 0; i < n; ++i) {
         scanf("%d", &arr[i]);
@@ -38,6 +48,8 @@ int main(void) {
     selection_sort(arr, n);
     printf("Sorted Array: ");
     print_array(arr, n);
+
+    free(arr);
 
     return 0;
 }
